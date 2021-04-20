@@ -1,35 +1,58 @@
 import { StatusBar } from 'expo-status-bar';
 import React,{useState} from 'react';
-import { StyleSheet, Text, SafeAreaView,Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, SafeAreaView,View,Image, TouchableOpacity, Dimensions } from 'react-native';
 import colors from '../../styles/colors';
+import fonts from '../../styles/fonts';
 import watering from '../assets/watering.png';
-import { Button } from '../components/Button';
+import {Entypo} from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+
 export default function Welcome() {
+  const navigation =useNavigation();
+  function handleStart() {
+    navigation.navigate('UserIdentification')
+  }
     return (
       <SafeAreaView style={styles.container}>
+        <View style={styles.wapper}>
         <Text style={styles.title}>Gerencie {'\n'} 
-        suas plantas {'\n'} de forma fácil</Text>
-        <Image source={watering} style={styles.image}/>
+        suas plantas  de {'\n'}  forma fácil</Text>
+        <Image 
+        source={watering} 
+        style={styles.image}
+        resizeMode="contain"
+        />
         <Text style={styles.subtitle}>Não esqueça mais de regar suas plantas. Nós cuidamos de lembrar você sempre que precisar.</Text>
-       <Button title='>' />
+        <TouchableOpacity style={styles.button} activeOpacity={0.7} onPress={handleStart}>
+          <Entypo name="chevron-thin-right"  style={styles.buttonIcon}/>
+      </TouchableOpacity>
+      </View>
       </ SafeAreaView>
     );
   }
   const styles = StyleSheet.create({
     container: {
       flex: 1,
+      
+    },
+    wapper:{
+      flex: 1,
       alignItems: 'center',
-      justifyContent: 'space-between'
+      justifyContent: 'space-around',
+      paddingHorizontal:20
     },
     title:{
-      fontSize:32,
+      fontSize:28,
       fontWeight: 'bold',
+      fontFamily:fonts.heading,
       textAlign:'center',
       color:colors.heading,
-      marginTop:38
+      marginTop:38,
+      lineHeight:34
     },
     subtitle:{
       textAlign:'center',
+      fontFamily:fonts.complement,
       fontSize:18,
       paddingHorizontal:20,
       color:colors.heading,
@@ -44,12 +67,13 @@ export default function Welcome() {
       width:56
 
     },
-    image:{
-      width:292,
-      height:284
-    },
-    buttonText:{
+    buttonIcon:{
       color:colors.white,
       fontSize:24
-    }
+    },
+    image:{
+      height:Dimensions.get('window').width*0.7
+    },
+    
+    
   })
