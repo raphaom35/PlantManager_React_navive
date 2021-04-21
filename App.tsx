@@ -14,6 +14,8 @@ LogBox.ignoreAllLogs();
   if(!fontsLoaded)
   return <AppLoading/>
 
+
+  
   return (
     
       <Routes/>
