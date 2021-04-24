@@ -10,36 +10,24 @@ import Header from '../components/Header';
 import PlantCardPrimary from '../components/PlantCardPrimary';
 import api from '../services/api';
 import Load from '../components/Load'
+import { useNavigation } from '@react-navigation/native';
+import { PlantProp } from '../libs/storage';
+
 interface EnvarimentProps{
     key:string;
     title:string;
 }
 
-interface PlantProps{
-    id: string;
-    name: string;
-    about: string;
-    water_tips: string;
-    photo: string;
-    environments: [string];
-    frequency: {
-      times: number;
-      repeat_every: string;
-    }
-    
-}
-
-
 
 export default function PlanttSelect(){
     const [envariments,setEnvariments] =useState<EnvarimentProps[]>();
-    const [plants,setPlants] =useState<PlantProps[]>();
-    const [Filtredplants,setFiltredPlants] =useState<PlantProps[]>();
+    const [plants,setPlants] =useState<PlantProp[]>();
+    const [Filtredplants,setFiltredPlants] =useState<PlantProp[]>();
     const [envarimentsSelected,setenvarimentsSelected] =useState('all');
     const [loading,setloading] =useState(true);
     const [page,setPage] = useState(1);
     const [loadingMore,setloadingMore] =useState(false);
-    const [loadedAll,setloadedAll] =useState(false);
+    const navigation =useNavigation();
     useEffect(()=>{
         async function fetchEnvariment(){
             const {data} =await api.get('plants_environments?_sort=title&_order=asc')
@@ -87,6 +75,9 @@ export default function PlanttSelect(){
         setloading(false);
         setloadingMore(false);
     }
+    function handlePlantSelect(plant:PlantProp){
+        navigation.navigate("PlantSave",{plant})
+    }
     if(loading)
     return <Load/>
     return(
@@ -102,6 +93,7 @@ export default function PlanttSelect(){
             </View>
             <View>
             <FlatList 
+            keyExtractor={(item)=>String(item.key)}
             data={envariments}
             renderItem={({item})=>(
                 <EnvarimentButton 
@@ -118,8 +110,11 @@ export default function PlanttSelect(){
             <View style={styles.plants}>
             <FlatList 
             data={Filtredplants}
+            keyExtractor={(item)=>String(item.id)}
             renderItem={({item})=>(
-                <PlantCardPrimary data={item}/>
+                <PlantCardPrimary 
+                onPress={()=>handlePlantSelect(item)}
+                data={item}/>
             )}
             showsVerticalScrollIndicator={false}
             numColumns={2}
@@ -174,3 +169,5 @@ const styles = StyleSheet.create({
     },
    
 })
+
+
