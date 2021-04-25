@@ -1,8 +1,6 @@
 <h1 align="center">
   <img src="https://github.com/raphaom35/PlantManager_React_navive/blob/main/assets/splash.png" width=250  height=250 alt="Moveit">
-<br>
 </h1>
-
 <p align="center">
 Application created helps people remember to water their plants
 </p>
