@@ -43,8 +43,7 @@ export default function Welcome() {
     },
     title:{
       fontSize:28,
-      fontWeight: 'bold',
-      fontFamily:fonts.heading,
+      fontFamily:fonts.text,
       textAlign:'center',
       color:colors.heading,
       marginTop:38,

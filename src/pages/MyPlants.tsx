@@ -1,15 +1,16 @@
 import React,{useEffect, useState} from 'react';
 import { StyleSheet, Text,
-    View,Image, FlatList
+    View,Image, FlatList, Alert
  } from 'react-native';
 import Header from '../components/Header';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
 import waterdrop from '../assets/waterdrop.png'
-import { loadPlant, PlantProp } from '../libs/storage';
+import { deletePlant, loadPlant, PlantProp, StoragePlantProps } from '../libs/storage';
 import { formatDistance } from 'date-fns';
 import { pt } from 'date-fns/locale';
 import PlantCardSecondary from '../components/PlantCardSecond';
+import Load from '../components/Load';
 
 export default function MyPlants(){
     const [MyPlants,setMyPlants] =useState<PlantProp[]>([]);
@@ -21,12 +22,12 @@ export default function MyPlants(){
             const plantsStorage = await loadPlant();
 
             const nextTime =formatDistance(
-                new Date(plantsStorage[0].dataTimeNotification).getTime(),
+                new Date(plantsStorage[0].dateTimeNotification).getTime(),
                 new Date().getTime(),
                 {locale:pt}
             );
             setnextWaterd(
-                `Não esquele de regar a ${plantsStorage.[0].name} á ${nextTime} horas`
+                `Não esquele de regar a ${plantsStorage[0].name} á ${nextTime} horas`
             )
            
             setMyPlants(plantsStorage);
@@ -34,7 +35,32 @@ export default function MyPlants(){
         }
         loadStoredData()
     },[])
-
+    function handleRemove(plant: PlantProp) {
+        Alert.alert('Remover', `Deseja remover a ${plant.name}?`, [
+          {
+            text: 'Não 🙏',
+            style: 'cancel'
+          },
+          {
+            text: 'Sim 😭',
+            onPress: async () => {
+              try {
+                await deletePlant(plant.id);
+                
+                setMyPlants((oldData) =>
+                oldData.filter((item) => item.id !== plant.id)
+                );
+    
+              } catch {
+                Alert.alert('Ocorreu um erro ao tentar remover a planta 😭.')
+              }
+            },
+            style: 'destructive'
+          }
+        ])
+      }
+    if(loading)
+    return <Load/>
     return(
         <View style={styles.container}>
             <Header/>
@@ -55,6 +81,7 @@ export default function MyPlants(){
                 keyExtractor={(item)=>String(item.id)}
                 renderItem={(item)=>(
                     <PlantCardSecondary data={item.item}
+                    handleremove={()=>handleRemove(item)}
                     />
                 )}
                 showsVerticalScrollIndicator={false}

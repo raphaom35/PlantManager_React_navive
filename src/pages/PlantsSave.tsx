@@ -11,11 +11,11 @@ import { getBottomSpace } from 'react-native-iphone-x-helper';
 import { useRoute } from '@react-navigation/core';
 import DateTimePicker,{Event} from '@react-native-community/datetimepicker'
 import { format, isBefore } from 'date-fns';
-import { loadPlant, PlantProp, savePlant } from '../libs/storage';
+import { loadPlant, PlantProps, savePlant } from '../libs/storage';
 import { useNavigation } from '@react-navigation/native';
 
 interface Params{
-    plant:PlantProp
+    plant:PlantProps
 }
 
 export default function PlantSave(){
@@ -32,6 +32,7 @@ export default function PlantSave(){
             setselectedDateTime(new Date())
             return Alert.alert('Escolha uma data no futuro! ⏰');
         }
+      
         if(dateTime)
         setselectedDateTime(dateTime);
     }
@@ -44,7 +45,7 @@ export default function PlantSave(){
         try{
             await savePlant({
                ...plant,
-               dataTimeNotification:selectedDateTime 
+               dateTimeNotification:selectedDateTime 
             })
             navigation.navigate('Confirmation',{
                 title:'Tudo certo',
@@ -58,6 +59,10 @@ export default function PlantSave(){
         }
     }
     return(
+    <ScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.container}
+    >
      <View style={styles.container}>
      <View style={styles.PlantInfo}>
         <SvgFromUri
@@ -100,6 +105,7 @@ export default function PlantSave(){
         <Button title="Cadastrar planta" onPress={haldleSave} />
      </View>
     </View>
+    </ScrollView>
     )
  }
 const styles = StyleSheet.create({
