@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="https://github.com/raphaom35/PlantManager_React_navive/blob/main/assets/splash.png" width=250  height=200 alt="Moveit">
+  <img src="https://github.com/raphaom35/PlantManager_React_navive/blob/main/assets/splash.png" width=250  height=250 alt="Moveit">
 <br>
 </h1>
 
